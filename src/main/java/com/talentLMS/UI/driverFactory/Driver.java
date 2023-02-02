@@ -1,0 +1,58 @@
+package com.talentLMS.UI.driverFactory;
+
+import com.talentLMS.UI.dataProviders.ConfigReader;
+import org.openqa.selenium.WebDriver;
+
+public class Driver {
+
+    /**
+     * @author Aman Omorbekov
+     */
+
+    private Driver(){
+        // Singleton pattern
+
+    }
+
+    private static WebDriver driver;
+
+    public static WebDriver getDriver(){
+        if (driver == null){
+            switch (ConfigReader.getProperty("browser").toLowerCase()){
+                case "chrome":
+                    driver= ChromeWebDriver.loadChromeDriver();
+                    break;
+                case "edge":
+                    driver=EdgeWebDriver.loadEdgeDriver();
+                    break;
+                case "firefox":
+                    driver = FireFoxWebDriver.loadFireFox();
+                case "safari":
+                    driver=SafariWebDriver.loadSafari();
+
+
+                default:
+                    driver = ChromeWebDriver.loadChromeDriver();
+                    break;
+            };
+        }
+
+
+
+        return  driver;
+
+    }
+    public static void closeDriver(){
+        try {
+            if (driver!=null){
+                driver.close();
+                driver.quit();
+                driver=null;
+            }
+        }catch (Exception e){
+            System.out.println("Error while closing driver");
+        }
+    }
+
+
+}
